@@ -2,16 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:ver-blog | crear-blog | editar-blog | borrar-blog',['only' => ['index']]);
+        $this->middleware('permission:crear-blog', ['only' => ['create','store']]);
+        $this->middleware('permission:editar-blog', ['only' => ['edit','update']]);
+        $this->middleware('permission:borrar-blog', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        //2
+        $blogs = Blog::paginate();
+        return view('blogs.index', compact('blogs'));
+
     }
 
     /**
@@ -19,7 +30,9 @@ class BlogController extends Controller
      */
     public function create()
     {
-        //
+        //2
+        return view('blogs.crear');
+
     }
 
     /**
@@ -27,7 +40,15 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //2
+        $request->validate([
+            'titulo' => 'required',
+            'contenido' => 'required',
+        ]);
+        Blog::create($request->all());
+        return redirect()->route('blogs.index');
+
+
     }
 
     /**
@@ -41,24 +62,36 @@ class BlogController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit( Blog $blog)
     {
-        //
+        //2
+        return view('blogs.editar', compact('blog'));
+
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Blog $blog)
     {
-        //
+        //2
+        request()->validate([
+            'titulo' => 'required',
+            'contenido' => 'required',
+        ]);
+        $blog->update($request->all());
+        return redirect()->route('blogs.index');
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Blog $blog)
     {
-        //
+        //2
+        $blog->delete();
+        return redirect()->route('blogs.index');
     }
 }

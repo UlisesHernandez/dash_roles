@@ -65,11 +65,11 @@ class RolController extends Controller
     {
         //1
         $role = Role::find($id);
-       $permission = Permission::get();
-       $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
-           ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
-           ->all();
-       return view('roles.editar', compact('role','permission','rolePermissions'));
+        $permission = Permission::get();
+        $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
+            ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
+            ->all();
+        return view('roles.editar', compact('role','permission','rolePermissions'));
 
     }
 
