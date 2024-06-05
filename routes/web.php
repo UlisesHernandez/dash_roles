@@ -1,18 +1,20 @@
 <?php
 
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\RolController;
+use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+
+//1
+Route::group(['middleware'=>['auth']],function (){
+    Route::resource('roles',RolController::class);
+    Route::resource('usuarios',UsuarioController::class);
+    Route::resource('blogs',BlogController::class);
 });
